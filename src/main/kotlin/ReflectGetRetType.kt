@@ -1,11 +1,22 @@
 package top.superyaxi
 
-inline fun <reified T> getTypeName(): String {
-    return T::class.java.name // 可以直接访问类型信息
+inline fun <reified T> getTypeName(): T {
+    println("\n\t"+T::class.java.name)
+    return when (T::class) {
+        String::class -> "aaa" as T
+        Int::class -> 111 as T
+        Boolean::class -> false as T
+        else -> throw UnsupportedOperationException("No default value for type ${T::class}")
+    }
 }
 
 fun main() {
+
     // 使用
-    val typeName = getTypeName<String>() // 返回 "java.lang.String"
-    println("\n\t"+typeName)
+    val test1 = getTypeName<String>() // 返回 "java.lang.String"
+    println("\n\t"+test1)
+
+    val test2: Int = getTypeName()
+    println("\n\t"+test2)
+
 }
