@@ -1,12 +1,14 @@
 package top.superyaxi.klassAndObject
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 // 实现Comparable接口定义排序规则
 data class Person(
     val name: String,
     val age: Int,
-    val joinDate: Date = Date()  // 默认值为当前时间
+    val joinDate: LocalDateTime = LocalDateTime.now()  // 默认值为当前时间
 ) : Comparable<Person> {
 
     // 重写compareTo方法：先按年龄倒序，年龄相同按姓名字典序，最后按加入日期
@@ -23,20 +25,25 @@ data class Person(
         // 第三优先级：加入日期倒序（最新加入的排前面）
         return other.joinDate.compareTo(this.joinDate)
     }
+
+    override fun toString(): String {
+        // 将joinDate设置为YYYY-MM-DD HH:mm:ss格式
+        return "Person(name=$name, age=$age, joinDate=${joinDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))})"
+    }
 }
 
 fun main() {
     // 创建测试数据（使用固定时间戳确保测试可重复）
     val calendar = Calendar.getInstance().apply {
-        set(2023, Calendar.JANUARY, 1)
+        set(2023, Calendar.JANUARY, 1, 13, 30, 10)
     }
 
     // 创建可变的日期对象用于测试
-    val date1 = calendar.time
+    val date1 = LocalDateTime.ofInstant(calendar.toInstant(), TimeZone.getDefault().toZoneId())
     calendar.add(Calendar.DAY_OF_MONTH, 1)
-    val date2 = calendar.time
+    val date2 = LocalDateTime.ofInstant(calendar.toInstant(), TimeZone.getDefault().toZoneId())
     calendar.add(Calendar.DAY_OF_MONTH, 1)
-    val date3 = calendar.time
+    val date3 = LocalDateTime.ofInstant(calendar.toInstant(), TimeZone.getDefault().toZoneId())
 
     val persons = listOf(
         Person("Alice", 30, date1),
