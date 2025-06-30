@@ -1,7 +1,7 @@
-package top.superyaxi
+package top.superyaxi.reflect
 
 inline fun <reified T> getReturnTypeName(): T {
-    println("\n\t"+T::class.java.name)
+    println("\n\t调用的返回类型为："+T::class.java.name)
     return when (T::class) {
         String::class -> "aaa" as T
         Int::class -> 111 as T

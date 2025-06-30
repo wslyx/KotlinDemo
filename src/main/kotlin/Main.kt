@@ -1,6 +1,7 @@
 package top.superyaxi
 
 import javaDemo.JvmInteraction
+import top.superyaxi.reflect.getReturnTypeName
 
 fun main() {
     val name = "Kotlin"
