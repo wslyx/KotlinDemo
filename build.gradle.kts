@@ -20,7 +20,7 @@ kotlin {
     jvmToolchain(21)
 }
 
-// build.gradle
+// build.gradle.kts
 tasks.wrapper {
     distributionUrl = "https://mirrors.aliyun.com/macports/distfiles/gradle/gradle-${gradleVersion}-bin.zip"
 }
