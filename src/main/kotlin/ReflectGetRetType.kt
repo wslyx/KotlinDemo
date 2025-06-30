@@ -1,6 +1,6 @@
 package top.superyaxi
 
-inline fun <reified T> getTypeName(): T {
+inline fun <reified T> getReturnTypeName(): T {
     println("\n\t"+T::class.java.name)
     return when (T::class) {
         String::class -> "aaa" as T
@@ -13,10 +13,10 @@ inline fun <reified T> getTypeName(): T {
 fun main() {
 
     // 使用
-    val test1 = getTypeName<String>() // 返回 "java.lang.String"
+    val test1 = getReturnTypeName<String>() // 返回 "java.lang.String"
     println("\n\t"+test1)
 
-    val test2: Int = getTypeName()
+    val test2: Int = getReturnTypeName()
     println("\n\t"+test2)
 
 }
