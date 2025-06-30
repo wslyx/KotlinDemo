@@ -8,4 +8,10 @@ fun main() {
     for (i in 1..5) {
         println("i = $i")
     }
+
+    println("--------------")
+
+    val a: Int = getReturnTypeName()
+    println(a)
+
 }
