@@ -18,7 +18,7 @@ fun main() {
 
     // 调用javaDemo.jvmInteraction的Java方法
     println("\n\n调用Java测试\n")
-    var jvmInteraction = JvmInteraction()
+    val jvmInteraction = JvmInteraction()
     println(jvmInteraction.test())
 
 }
