@@ -17,7 +17,7 @@ fun main() {
     println(a)
 
     // 调用javaDemo.jvmInteraction的Java方法
-    // TODO java.lang.ClassNotFoundException: javaDemo.JvmInteraction
+    println("\n\n调用Java测试\n")
     var jvmInteraction = JvmInteraction()
     println(jvmInteraction.test())
 
