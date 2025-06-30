@@ -1,5 +1,7 @@
 package top.superyaxi
 
+import javaDemo.JvmInteraction
+
 fun main() {
     val name = "Kotlin"
 
@@ -13,5 +15,10 @@ fun main() {
 
     val a: Int = getReturnTypeName()
     println(a)
+
+    // 调用javaDemo.jvmInteraction的Java方法
+    // TODO java.lang.ClassNotFoundException: javaDemo.JvmInteraction
+    var jvmInteraction = JvmInteraction()
+    println(jvmInteraction.test())
 
 }
