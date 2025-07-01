@@ -1,4 +1,4 @@
-package top.superyaxi
+package top.superyaxi.klassAndObject
 
 class KlassDemo {
 
