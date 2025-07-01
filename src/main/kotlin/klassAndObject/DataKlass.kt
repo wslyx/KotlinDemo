@@ -23,6 +23,9 @@ fun main() {
     println("equals测试:" + copyDataKlass.equals(dataKlass))
     // hashCode() 测试
     println("hashCode测试{ copy:" + copyDataKlass.hashCode() + " dataKlass:" + dataKlass.hashCode() + " }")
+    // 内存地址比较
+    println("copyDataKlass与dataKlass内存地址比较:" + (copyDataKlass === dataKlass))
+    println("自内存比较:" + (copyDataKlass === copyDataKlass))
     // 修改copy后的属性
     copyDataKlass.a = 1001
     println("修改copy属性后的数据类")
