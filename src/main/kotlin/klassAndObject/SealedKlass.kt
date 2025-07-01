@@ -13,6 +13,7 @@ fun eval(expr: Expr): Double = when (expr) {
 }
 
 fun main() {
+    println(eval(Const(999.666)))
     val sum = Sum(Const(1.0), Const(2.0))
     println(eval(sum))
     println(eval(NotANumber))
