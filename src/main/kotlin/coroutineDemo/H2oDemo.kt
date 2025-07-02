@@ -14,6 +14,7 @@ class H2O {
     private val outputMutex = Mutex()
     private val hQueue = Channel<suspend () -> Unit>(Channel.UNLIMITED)
     private val oQueue = Channel<suspend () -> Unit>(Channel.UNLIMITED)
+    //                                    许可数量       初始占用
     private val releaseBarrier = Semaphore(permits = 2, acquiredPermits = 0)
 
     suspend fun hydrogen(releaseHydrogen: suspend () -> Unit) {
