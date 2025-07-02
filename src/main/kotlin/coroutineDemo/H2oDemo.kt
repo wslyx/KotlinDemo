@@ -34,8 +34,7 @@ class H2O {
             tryOutput()
         }
         // 两个氢原子可以继续
-        releaseBarrier.release()
-        releaseBarrier.release()
+        releaseBarrier.releaseMultiple(2)
     }
 
     private suspend fun tryOutput() {
@@ -57,6 +56,11 @@ class H2O {
             }
         }
     }
+}
+
+// 扩展 Semaphore 一次释放多个许可
+fun Semaphore.releaseMultiple(count: Int) {
+    repeat(count) { this.release() }
 }
 
 fun main() = runBlocking {
