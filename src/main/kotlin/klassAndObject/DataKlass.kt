@@ -5,8 +5,12 @@ data class DataKlass (
     var b: String = "STRING DEMO",
     var c: Boolean = false
 ) {
+    // 额外的属性
+    var d: Float = 1.1f
+    var e: Double = 2.2
+    var f: Char = 'a'
     override fun toString(): String {
-        return "数据类DEMO (a=$a, b=$b, c=$c)"
+        return "数据类DEMO (a=$a, b=$b, c=$c, d=$d, e=$e, f=$f)"
     }
 }
 
@@ -15,6 +19,7 @@ fun main() {
     dataKlass.a = 1000
     dataKlass.b = "NEW STRING DEMO"
     dataKlass.c = true
+    dataKlass.d = 1.6f
     // toString() 测试
     println(dataKlass)
     // 复制，同 Java Clone
