@@ -2,12 +2,10 @@ package top.superyaxi.designPattern
 
 // 1. 基础组件定义
 sealed class Component {
-    // 添加层级打印支持
     abstract val name: String
     abstract val properties: Map<String, Any>
     abstract val children: List<Component>
 
-    // 递归打印UI树
     fun printTree(indent: String = "", isLast: Boolean = true) {
         val connector = if (indent.isEmpty()) "" else if (isLast) "└── " else "├── "
         print(if (indent.isEmpty()) connector else indent + connector)
@@ -30,7 +28,7 @@ class ContainerComponent(
     override val children: MutableList<Component> = mutableListOf()
 ) : Component() {
     override val name = "Container"
-    override val properties = mapOf(
+    override val properties: Map<String, Any> = mapOf(
         "direction" to (direction ?: "default")
     )
 }
@@ -52,8 +50,8 @@ class ImageComponent(
 }
 
 // 3. DSL 构建器
-class ComponentBuilder(private val parent: Component? = null) {
-    val children = mutableListOf<Component>()
+class ComponentBuilder {
+    private val children = mutableListOf<Component>()
 
     fun text(
         text: String,
@@ -76,13 +74,13 @@ class ComponentBuilder(private val parent: Component? = null) {
     fun container(
         direction: String? = null,
         block: ContainerBuilder.() -> Unit = {}
-    ): ContainerComponent {
+    ) {
         val builder = ContainerBuilder(direction)
         builder.block()
-        val container = builder.build(children.toList())
-        children.add(container)
-        return container
+        children.add(builder.build())
     }
+
+    fun getChildren(): List<Component> = children
 }
 
 // 4. 派生构建器
@@ -111,44 +109,42 @@ class ImageBuilder(private val src: String) : BaseBuilder<ImageComponent>() {
 }
 
 class ContainerBuilder(private val direction: String? = null) : BaseBuilder<ContainerComponent>() {
-    private val childBuilders = mutableListOf<ComponentBuilder.() -> Unit>()
+    private val children = mutableListOf<Component>()
 
-    fun column(block: ComponentBuilder.() -> Unit) = apply {
-        childBuilders.add(block)
+    // 内部组件构建方法
+    fun text(text: String, block: TextBuilder.() -> Unit = {}) {
+        val builder = TextBuilder(text)
+        builder.block()
+        children.add(builder.build())
     }
 
-    fun row(block: ComponentBuilder.() -> Unit) = apply {
-        childBuilders.add(block)
+    fun image(src: String, block: ImageBuilder.() -> Unit = {}) {
+        val builder = ImageBuilder(src)
+        builder.block()
+        children.add(builder.build())
     }
 
-    // 延迟构建子组件
-    fun build(existingChildren: List<Component> = emptyList()): ContainerComponent {
-        val children = existingChildren.toMutableList()
-
-        childBuilders.forEach { block ->
-            val builder = ComponentBuilder()
-            builder.block()
-            children.addAll(builder.children)
-        }
-
-        return ContainerComponent(direction, children)
+    fun container(direction: String? = null, block: ContainerBuilder.() -> Unit = {}) {
+        val builder = ContainerBuilder(direction)
+        builder.block()
+        children.add(builder.build())
     }
 
+    // 修正实现：提供无参数的 build 方法
     override fun build(): ContainerComponent {
-        TODO("Not yet implemented")
+        return ContainerComponent(direction, children)
     }
 }
 
 // 5. 应用入口
-fun myApp(block: ComponentBuilder.() -> Unit): Component {
-    val appContainer = ContainerComponent()
+fun myApp(block: ComponentBuilder.() -> Unit): ContainerComponent {
     val builder = ComponentBuilder()
     builder.block()
 
     // 将顶级组件放入根容器
-    appContainer.children.addAll(builder.children)
-
-    return appContainer
+    return ContainerComponent().apply {
+        children.addAll(builder.getChildren())
+    }
 }
 
 // 6. 使用示例 & 打印UI树
