@@ -14,11 +14,15 @@ fun User.print(){
 // 不属于 User 本身，但是可以像反射获取到的成员函数一样调用 User 的实例
 typealias UserExternFun = User.() -> Unit
 
-fun helloExtend(): UserExternFun = {
-    println("hello $name")
-}
+fun main(arg:Array<String>) {
+    fun helloExtend(): UserExternFun = {
+        println("hello $name")
+    }
 
-fun main(arg:Array<String>){
+    fun wordExtend(): UserExternFun = {
+        println("word $name")
+    }
+
     val user = User("Runoob")
     user.print()
     println("类对象输出:$user")
@@ -28,4 +32,5 @@ fun main(arg:Array<String>){
     print.invoke(user)
 
     helloExtend().invoke(user)
+    wordExtend()(user)
 }
