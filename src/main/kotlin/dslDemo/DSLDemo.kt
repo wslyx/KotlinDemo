@@ -38,7 +38,13 @@ class PageListView : View {
 class PageListBuilder {
     private val builders = mutableListOf<ComponentBuilder>()
 
-    fun addPage(builder: ComponentBuilder) {
+    // DSL的核心魔法：操作符重载
+    operator fun invoke(builder: ComponentBuilder) {
+        builders.add(builder)
+    }
+
+    // 支持+=语法
+    operator fun plusAssign(builder: ComponentBuilder) {
         builders.add(builder)
     }
 
@@ -68,34 +74,65 @@ class EmptyPageBuilder(private val title: String) : ComponentBuilder {
     }
 }
 
-// DSL函数
+// DSL函数 - 创建自然的使用语法
 fun pageList(block: PageListBuilder.() -> Unit): PageListView {
-    val builder = PageListBuilder()
-    builder.block()
-    return builder.build()
+    return PageListBuilder().apply(block).build()
 }
 
 // 使用示例
 fun main() {
     val titles = listOf("首页", "视频", "发现", "消息", "我")
 
-    // 创建PageList
+    // 创建PageList - 两种等价的自然写法
+    println("=== 第一种写法 ===")
     val appTab = pageList {
-        // 添加首页
-        addPage(HomePageBuilder())
-
-        // 添加其他页面
+        // 直接调用方式添加页面
+        this(HomePageBuilder())
         for (i in 1 until titles.size) {
-            addPage(EmptyPageBuilder(titles[i]))
+            this(EmptyPageBuilder(titles[i]))
+        }
+    }
+
+    println("=== 第二种写法 ===")
+    val appTab2 = pageList {
+        // 使用 += 操作符添加页面
+        this += HomePageBuilder()
+        for (i in 1 until titles.size) {
+            this += EmptyPageBuilder(titles[i])
+        }
+    }
+
+    println("第三种写法")
+    val appTab3 = pageList {
+        HomePageBuilder()
+        for (i in 1 until titles.size) {
+            EmptyPageBuilder(titles[i])
         }
     }
 
     // 初始化布局
-    println("\n=== 初始布局 ===")
-    appTab.layout(1080, 720)
+    println("\n=== 初始布局 === Tab1")
+    appTab.layout(1080, 1920)
 
     // 切换页面
     println("\n=== 切换到'发现'页面 ===")
     appTab.scrollToPage(2)
     appTab.layout(1080, 1920)
+
+    // appTab2
+    println("\n=== 初始布局 Tab2 ===")
+    appTab2.layout(1080, 1920)
+
+    println("\n=== 切换到'消息'页面 ===")
+    appTab2.scrollToPage(3)
+    appTab2.layout(1080, 1920)
+
+    // appTab3
+    println("\n=== 初始 Tab3 ===")
+    appTab3.layout(1080, 1920)
+
+    println("\n=== 添加'消息'页面 ===")
+    appTab3.scrollToPage(3)
+    appTab3.layout(1080, 1920)
+
 }
