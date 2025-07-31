@@ -1,7 +1,10 @@
 package reflect
 
+import kotlin.reflect.KMutableProperty
 import kotlin.reflect.KMutableProperty1
-import kotlin.reflect.full.* // 导入扩展函数
+import kotlin.reflect.full.functions
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.isAccessible
 
 data class Person(val name: String, var age: Int, private var id: Int = 0) {
@@ -25,6 +28,12 @@ fun main() {
     val ageProperty = memberProperties.find { it.name == "age" } as KMutableProperty1<Person, Int>
     ageProperty.set(person, 31) // 使用反射设置 age
     println("Alice is now ${person.age}") // Alice is now 31
+
+    val propertyAge = memberProperties.find { it.name == "age" }
+    if (propertyAge is KMutableProperty<*>) {
+        propertyAge.setter.call(person, 32)
+        println("Alice is now ${person.age}") // Alice is now 32
+    }
 
     // 4. 调用方法
     val greetFunction = personClass.functions.find { it.name == "greet" }!!
